@@ -34,4 +34,5 @@ void Timer0::interpt (intr i)
 {
 	TIMSK &= ~ (1 << TOIE0);
 	TIMSK |= i << TOIE0;
+	sei();
 }

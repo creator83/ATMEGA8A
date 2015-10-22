@@ -4,11 +4,11 @@
 * Created: 26.06.2015 15:36:52
 * Author: User
 */
-#define F_CPU 8000000
+#define F_CPU 1000000
 #include <avr/io.h>
 
 #define BAUD 9600
-#define UBRR_VAL F_CPU/16/BAUD-1
+#define UBRR_VAL F_CPU/16*BAUD-1
 
 #ifndef __UART_H__
 #define __UART_H__
@@ -27,7 +27,10 @@ private:
 
 //functions
 public:
-	uart(speed s, role = Transmitter);
+	uart(speed s);
+	void transmit (uint8_t data);
+	void transmit (char * str); 
+	
 protected:
 private:
 

@@ -33,6 +33,7 @@ private:
 	//functions
 public:
 	Gpio(port p);
+	Gpio(uint8_t p);
 	void setDirPin (unsigned char pin , DIR d = OUT);	
 	void setPin (unsigned char pin );
 	void clearPin (unsigned char pin);	

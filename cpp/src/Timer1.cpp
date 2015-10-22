@@ -1,8 +1,8 @@
 /* 
 * Timer1.cpp
 *
-* Created: 03.09.2015 14:53:52
-* Author: User
+* Created: 05.09.2015 21:18:38
+* Author: KOSHELEV
 */
 
 
@@ -12,8 +12,7 @@
 Timer1::Timer1(prsk p, mode m)
 {
 	div=p;
-	TCCR1B &= ~(1 << WGM12);
-	TCCR1B |= (m << WGM12);
+	TCCR1B |= m << WGM12;
 } //Timer1
 
 void Timer1::Start ()
@@ -29,24 +28,25 @@ void Timer1::Stop ()
 
 void Timer1::Set_Tcnt (uint16_t val)
 {
-	TCNT1L = val;
-	TCNT1H = val >> 8;
+	TCNT1 = val;
 }
 
-void Timer1::Set_OcrA (uint16_t val)
+void Timer1::Set_OCR (uint16_t val , OCR i)
 {
-	OCR1AL = val;
-	OCR1AH = val >> 8;
-}
+
+	if (i)
+	{
+		OCR1B = val;
+	} 
+	else
+	{
+		OCR1A = val;
+	}
 	
-void Timer1::Set_OcrB (uint16_t val)
-{
-	OCR1BL = val;
-	OCR1BH = val >> 8;	
 }
 
 void Timer1::interpt (intr i)
 {
 	TIMSK |= 0x04 << i;
+	sei();
 }
-

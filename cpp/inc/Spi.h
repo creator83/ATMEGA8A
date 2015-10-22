@@ -19,7 +19,7 @@ class Spi
 public:
 	enum div {div4 , div16 , div64 , div128};
 	enum role {Slave , Master};
-	enum SpiPin {MOSI=3,MISO,SCK};		
+	enum SpiPin {CS = 2 , MOSI,MISO,SCK};		
 protected:
 
 private:
@@ -32,6 +32,8 @@ public:
 	Spi(div d=div4 , role r=Master);
 	unsigned char transfer (unsigned char data);
 	unsigned char transfer_byte (unsigned char data);
+	void CS_SET ();
+	void CS_CLEAR ();
 
 protected:
 private:

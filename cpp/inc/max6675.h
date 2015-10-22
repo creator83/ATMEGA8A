@@ -6,12 +6,13 @@
 */
 #include <avr/io.h>
 #include "Gpio.h"
+#include "Spi.h"
 
 
 #ifndef __MAX6675_H__
 #define __MAX6675_H__
 
-#define SoftSpi
+//#define SoftSpi
 
 class max6675
 {
@@ -38,6 +39,7 @@ public:
 	max6675();
 	
 #endif
+ double get_temp ();
 
 protected:
 private:

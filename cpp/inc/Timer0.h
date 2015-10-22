@@ -5,7 +5,7 @@
 * Author: User
 */
 #include <avr/io.h>
-
+#include <avr/interrupt.h>
 
 
 #ifndef __TIMER0_H__

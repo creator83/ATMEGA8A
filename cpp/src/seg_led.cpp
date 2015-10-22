@@ -10,7 +10,7 @@
 
 char seg_led::digit [11] = {0x3F , 0x06 , 0x5B , 0x4F , 0x66 , 0x6D , 0x7D , 0x07 , 0x7F , 0x6F , 0x00};
 char seg_led::digitDp [11] = {0xBF , 0x86 , 0xDB , 0xCF , 0xE6 , 0xED , 0xFD , 0x87 , 0xFF , 0xEF , 0x00};
-unsigned char seg_led::time = 3;
+uint8_t seg_led::d[4] = {first ,second , third, fourth};
 
 unsigned int seg_led::div10 (unsigned int number)
 {
@@ -55,7 +55,14 @@ void seg_led::Calc_digit (float n)
 
 #endif
 
-
+void seg_led::Calc_digit (uint8_t n)
+{
+	//unsigned int res;
+	numb [hundret] = n/100;
+	//res = n - numb [hundret]*100;
+	numb [decimals] = (n-numb [hundret]*100)/10;
+	numb [ons] = n%10;
+}
 
 //void seg_led::Calc_digit (unsigned int numb)
 //{
@@ -104,31 +111,53 @@ void seg_led::Show_digit (float n)
 
 	char time1=1;
 	Calc_digit (n);
-	if (!hun) PORTC = 0;
+	if (!hun) seg.setValPort(digit [10]);
 	else
 	{
-		PORTC = 0;
-		PORTC = 1<<3;
-		PORTB = digit [hun];
+		dig.setValPort(0);
+		dig.setPin(fourth);
+		seg.setValPort(digit [hun]);
 		_delay_ms(time1);
 	}
-	if (hun==0 && dec ==0)PORTC = 0;
+	if (hun==0 && dec ==0)
+	{
+		seg.setValPort(digit [10]);
+		seg.setValPort(digit [10]);
+	}
 	else
 	{
-		PORTC = 0;
-		PORTC = 1<<2;
-		PORTB = digit [dec];
+		dig.setValPort(0);
+		dig.setPin(third);
+		seg.setValPort(digit [dec]);
 		_delay_ms(time1);
 	}
 
-	PORTC = 0;
-	PORTC = 1<<1;	
-	PORTB = digitDp [ones];
+	dig.setValPort(0);
+	dig.setPin(second);	
+	seg.setValPort(digitDp [ones]);
 	_delay_ms(time1);
-	PORTC = 0;
-	PORTC = 1<<0;
-	PORTB = digit [decimal];
+	dig.setValPort(0);
+	dig.setPin(first);	
+	seg.setValPort(digit [decimal]);
 	_delay_ms(time1);	
+}
+
+void seg_led::Show_digit (uint8_t num, uint8_t i)
+{
+	Calc_digit (num);
+	if (i==1)
+	{
+		dig.setValPort(0);
+		dig.setPin(d[i]);
+		seg.setValPort(digitDp [numb[i]]);	
+	}
+	else
+	{
+		dig.setValPort(0);
+		dig.setPin(d[i]);
+		seg.setValPort(digit [numb[i]]);
+	}
+			
 }
 
 void seg_led::Show_digit1 (float num)
@@ -138,9 +167,12 @@ void seg_led::Show_digit1 (float num)
 
 
 seg_led::seg_led()
-:seg (Gpio::B) , dig (Gpio::C)
+:seg (Gpio::B) , dig (Gpio::C) , timer (Timer0::div64)
 {
 	seg.setDirPort(0xFF);
-	dig.setDirPort(0x0F);	
+	dig.setDirPin(first);
+	dig.setDirPin(second);
+	dig.setDirPin(third);
+	dig.setDirPin(fourth);
 } 
 

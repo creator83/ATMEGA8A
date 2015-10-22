@@ -10,6 +10,7 @@
 #include "Spi.h"
 
 
+
 int main()
 {
 	Spi spi (Spi::div64);
@@ -17,10 +18,13 @@ int main()
 	
 	while(1)
 	{
-		spi.transfer_byte(0xF0);
-		_delay_ms(1000);
-		spi.transfer_byte(0x0F);
-		_delay_ms(1000);
-
+		spi.CS_CLEAR();
+		spi.transfer(0xF0);
+		spi.CS_SET();
+		_delay_ms(200);
+		spi.CS_CLEAR();
+		spi.transfer(0x0F);
+		spi.CS_SET();
+		_delay_ms(200);
 	}
 }

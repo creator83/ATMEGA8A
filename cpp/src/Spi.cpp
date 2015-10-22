@@ -14,17 +14,17 @@
 Spi::Spi(div d , role r)
 :pin (Gpio::B)
 {
-	//pin.setDirPin(CS);
+	pin.setDirPin(CS);
 	pin.setDirPin(SCK);
 	pin.setDirPin(MOSI);
-//	pin.setPin(CS);
+	pin.setPin(CS);
 	
 	SPCR |= d;
 	SPCR |= (1 << SPE)|(r << MSTR);
 
 } //Spi
 
-unsigned char transfer (unsigned char data)
+unsigned char Spi::transfer (unsigned char data)
 {
 	SPDR = data;
 	while(!(SPSR & (1<<SPIF)));
@@ -40,4 +40,12 @@ unsigned char Spi::transfer_byte (unsigned char data)
 	return SPDR;
 }
 */
+void Spi::CS_SET ()
+{
+	pin.setPin(CS);
+}
 
+void Spi::CS_CLEAR ()
+{
+	pin.clearPin(CS);
+}

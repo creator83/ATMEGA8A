@@ -4,7 +4,7 @@
 * Created: 29.06.2015 9:26:46
 * Author: User
 */
-#define F_CPU 8000000
+#define F_CPU 1000000
 #include <avr/io.h>
 #include <util/delay.h>
 #include "Gpio.h"
@@ -16,7 +16,7 @@
 	const uint8_t pt = 100;
 	const uint16_t r_val = 13407;
 	
-	const int8_t CS = 4;// pin CS
+	const int8_t CS = 2;// pin CS
 
 
 class mcp3551
