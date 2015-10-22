@@ -1,23 +1,19 @@
-#include "stm32f0xx.h"                  // Device header
-#include "uart.h"
+#define F_CPU 1000000UL
+#include <avr/io.h>
+#include <util/delay.h>
 #include "max6675.h"
-#include "tact.h"
 
 
 
 
 int main ()
 {
-	init_HSI ();
-	init_PLL ();
-	uart_init ();
 	max6675_init ();
 	
 	
 	while (1)
 	{
-		transmit_byte (readCelsius());
-		delay_ms (500);
+		_delay_ms (500);
 	}
 	
 }

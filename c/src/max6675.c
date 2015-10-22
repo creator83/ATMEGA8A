@@ -60,28 +60,25 @@ uint8_t readCelsius(void)
 
 void max6675_init (void)
 {
-	init_spi ();
+	spi_init ();
 }
 
-uint8_t spiread(void)
-{
-	return transfer (0);
-}
 
 uint8_t readCelsius(void)
 {
   uint16_t v;
 
-  clear_cs ();
-  delay_ms(1);
+  CS_CLEAR;
+  _delay_ms(1);
 
-  v = spiread();
+  v = transfer(0);
   v <<= 8;
-  v |= spiread();
+  v |= transfer(0);
 
-  set_cs ();
+  CS_SET;
 
-  if (v & 0x4) {
+  if (v & (1 << TC)) 
+  {
     // uh oh, no thermocouple attached!
     return 0; 
     //return -100;
@@ -89,7 +86,7 @@ uint8_t readCelsius(void)
 
   v >>= 3;
 
-  return (uint8_t)v*0.25-9;
+  return (uint8_t)v*0.25;
 }
 #endif
 
