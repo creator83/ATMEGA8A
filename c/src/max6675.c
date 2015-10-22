@@ -7,9 +7,10 @@
 
 void max6675_init (void)
 {
-  RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-  GPIOA->MODER &= ~(GPIO_MODER_MODER4|GPIO_MODER_MODER5|GPIO_MODER_MODER6);
-  GPIOA->MODER |= GPIO_MODER_MODER5_0|GPIO_MODER_MODER4_0;
+	PinDDR |= (1 << sclk)|(1 << cs);
+	PinDDR &= ~1 << miso;
+	PinPORT |= 1 << cs;
+	
 }
 
 uint8_t spiread(void)
@@ -19,16 +20,16 @@ uint8_t spiread(void)
 
   for (i=7; i>=0; i--)
   {
-    GPIOA->ODR &=~(1 << sclk);
-    delay_ms(1);
-    if ((GPIOA->IDR & (1 << miso)))
+    PinPORT &=~(1 << sclk);
+    _delay_ms(1);
+    if ((PinPORT & (1 << miso)))
     {
       //set the bit to 0 no matter what
       d |= (1 << i);
     }
 
-    GPIOA->ODR |=(1 << sclk);
-    delay_ms(1);
+    PinPORT |=(1 << sclk);
+    _delay_ms(1);
   }
   return d;
 }
@@ -37,14 +38,14 @@ uint8_t readCelsius(void)
 {
   uint16_t v;
 
-  GPIOA->ODR &=~(1 << cs);
-  delay_ms(1);
+  CS_clear;
+  _delay_ms(1);
 
   v = spiread();
   v <<= 8;
   v |= spiread();
 
-  GPIOA->ODR |=(1 << cs);
+   CS_set;
 
   if (v & 0x4) {
     // uh oh, no thermocouple attached!
@@ -54,7 +55,7 @@ uint8_t readCelsius(void)
 
   v >>= 3;
 
-  return (uint8_t)v*0.25-7;
+  return (uint8_t)v*0.25;
 }
 #else
 
