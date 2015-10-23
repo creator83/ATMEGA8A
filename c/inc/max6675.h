@@ -3,6 +3,7 @@
 #include <util/delay.h>
 #include "spi.h"
 
+
 //Soft Spi
 #define SOFTSPI
 
@@ -27,9 +28,11 @@
 
 void max6675_init (void);
 
-uint8_t readCelsius(void);
+double readCelsius(void);
 
 uint8_t spiread(void);
+
+void buffer (double val);
 
 
 
